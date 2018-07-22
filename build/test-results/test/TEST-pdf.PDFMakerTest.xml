@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="pdf.PDFMakerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2018-07-22T04:29:58" hostname="DESKTOP-0EQ0J9V" time="363.499">
+  <properties/>
+  <testcase name="testParsePDF()" classname="pdf.PDFMakerTest" time="363.499"/>
+  <system-out><![CDATA[start
+ORCスタート
+終了
+ORCスタート
+終了
+ORCスタート
+終了
+ORCスタート
+終了
+ORCスタート
+終了
+ORCスタート
+終了
+ORCスタート
+終了
+ORCスタート
+終了
+ORCスタート
+終了
+ORCスタート
+終了
+ORCスタート
+終了
+ORCスタート
+終了
+ORCスタート
+終了
+ORCスタート
+終了
+ORCスタート
+終了
+ORCスタート
+終了
+end
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
