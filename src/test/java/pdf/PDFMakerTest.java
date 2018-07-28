@@ -1,7 +1,5 @@
 package pdf;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -23,8 +21,9 @@ class PDFMakerTest {
 
 	@Test
 	void testParsePDF() throws Exception{
-		String input_path="./pdf/input/2018h30h_sc_am2_qs.pdf";
-		String output_path="./pdf/output/2018h30h_sc_am2_qs.txt";
+		String input_path="./pdf/input/sc/am2/2016h28a_sm_am2_qs.pdf";
+		String output_path="./pdf/output/2016h28a_sm_am2_qs.pdf.txt";
+		long start = System.currentTimeMillis();
 		
 		//ì«Ç›çûÇﬁPDFÉtÉ@ÉCÉã
 		PDDocument document = PDDocument.load(new File(input_path));
@@ -39,9 +38,9 @@ class PDFMakerTest {
 				Charset.forName("MS932"),
 				StandardOpenOption.CREATE);
 		System.out.println("OCR end");
+		long end = System.currentTimeMillis();
+		System.out.println(String.format("end %dïb",(end-start)/1000));
 		
-		XMLCreater.createXMLFile("work/text/result/2018h30h_sc_am2_qs.pdf.txt",
-				"./pdf/xml/2018h30h_sc_am2_qs.xml");
 	}
 	
 	@Test

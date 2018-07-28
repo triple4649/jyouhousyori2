@@ -12,7 +12,9 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.3.4'
     compile group: 'org.apache.pdfbox', name: 'pdfbox-app', version: '2.0.1'
     compile group: 'org.jsoup', name: 'jsoup', version: '1.9.1'
-    compile group: 'net.sourceforge.tess4j', name: 'tess4j', version: '3.0.0'
+    //compile group: 'net.sourceforge.tess4j', name: 'tess4j', version: '3.0.0'
+// https://mvnrepository.com/artifact/net.sourceforge.tess4j/tess4j
+compile group: 'net.sourceforge.tess4j', name: 'tess4j', version: '3.5.1'
     compile files('lib/kuromoji-0.7.7.jar')
 }
 

@@ -20,9 +20,8 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 public class PDFMaker {
 	public static void main(String args[])throws Exception{
-		String input_path="./pdf/input/2018h30h_sc_am2_qs.pdf";
-		String output_path="./pdf/output/2018h30h_sc_am2_qs.txt";
-		
+		String input_path="./pdf/input/2016h28a_sm_am2_qs.pdf";
+		String output_path="./pdf/output/2016h28a_sm_am2_qs.pdf.txt";
 		//読み込むPDFファイル
 		PDDocument document = PDDocument.load(new File(input_path));
 		//PDFページを処理する
@@ -35,7 +34,6 @@ public class PDFMaker {
 				stream.map(s->PDFMaker.exePDFpage(s)).collect(Collectors.toList()), 
 				Charset.forName("MS932"),
 				StandardOpenOption.CREATE);
-		System.out.println("end");
 	}
 	
 	//PDFのPageを処理する
