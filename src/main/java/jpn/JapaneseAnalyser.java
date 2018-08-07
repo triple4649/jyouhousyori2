@@ -1,74 +1,82 @@
 package jpn;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import org.atilika.kuromoji.Tokenizer;
+import org.jsoup.Jsoup;
+import org.jsoup.select.Elements;
+
 
 
 
 public class JapaneseAnalyser {
-	private static final String PREFIX ="2017|SC|春|AM2";
+	private static final String FILE_NAME="2017h29h_sc_am2_qs.pdf.xml";
 	
     public static void main(String[] args) throws Exception{
-    	//parse_1.txtにセキュリティスペシャリスト　午前2の問題用紙をOCR読み取りした結果が格納されている
-        String input = Files.lines(Paths.get("work/text/2017h29h_sc_am2_qs.txt"), Charset.forName("MS932"))
-        .reduce((s,v)->s+v.replaceAll("\\r\\n", "").trim()).get();
-		Files.write(Paths.get("work/text/result_2017h29h_sc_am2_qs.txt"), 
-				analysis(input), 
-				Charset.forName("MS932"),
-				StandardOpenOption.CREATE_NEW);
-
-        analysis(input);
+    	System.out.println(getResult());
     }	
-    public static List<String> analysis(String s)throws IOException{
-    	List <String> lines= new ArrayList<String>();
-    	lines.add("年度|試験区分|時期|パート|出現頻度|出現単語|文字列長");
-    	lines.addAll(getResults(s));
-    	return lines;
+    
+    public static String getResult() throws Exception{
+    	return parseXML(String.format("pdf/xml/%s", FILE_NAME))
+    	.stream()
+    	.reduce("",
+    			(s,s1)->s+s1+System.lineSeparator(),
+    			(s,s1)->s);
     }
     
-    public static List<String> getResults(String s){
-    	return new ArrayList<Entry<String,Integer>>(
-    	    Tokenizer.builder()
-    	    .build()
-    	    .tokenize(s)
-    	    .stream()
-    	    .filter(a ->countOut(a.getPartOfSpeech(),a.getSurfaceForm()))
-    	    .map(e -> e.getSurfaceForm())
-    	    .sorted()
-    	    .collect(
-	    	    Collectors.groupingBy(
-	    	        b->b,
-	    	    	Collectors.summingInt(b->1)
-	    	    )
-	    	 )
-	    	 .entrySet()
-    	)
-	    .stream()
-	    .map((m)->String.format("%s|%d|%s|%d",PREFIX,m.getValue(),m.getKey(),m.getKey().length()))
-	    .collect(Collectors.toList());
+    //JSoupを使ってxmlを解析する
+	public static List<String> parseXML(String str){
+		try{
+			return Jsoup.parse(new File(str),"UTF-8")
+					//タグ questionに属する子要素をすべて取得する
+					.getElementsByTag("question") 
+					.stream()
+					.map(s->s.attr("num")+":"
+							+transform(s.text()
+							+" "
+							+concatQuestionStrs(s.getElementsByTag("selection"))))
+					.collect(Collectors.toList());
+		}catch(Exception e){
+			e.printStackTrace();
+			return new ArrayList<String>();
+		}
+    }
+	
+	//引数で渡された文字例に対して名詞を抽出する
+	public static String transform(String s){
+    	return Tokenizer.builder()
+        	    .build()
+        	    .tokenize(s)
+        	    .stream()
+        	    .filter(a ->countOut(a.getPartOfSpeech()))
+        	    .map(e -> e.getSurfaceForm())
+        	    .filter(JapaneseAnalyser::myFilter)
+        	    .reduce((v1,v2)->v1+"|"+v2)
+        	    .orElse("");
     }
     
+    //選択肢に含まれているテキストを連結する
+	public static String concatQuestionStrs(Elements elements) {
+		return elements
+		.stream()
+		.reduce("",
+    			(e1,e2)->e1+e2.text(),
+    			(e1,e2)->e2);
+	}
+	
     //除外条件
-    public static boolean countOut(String s,String v){
-    	return s.indexOf("名詞") >=0
-    			&& v.length() > 1
-    			&& !(v.indexOf("〟") >=0)
-    			&& !(v.indexOf("轟")>=0)
-    			&& !(v.indexOf("蝿")>=0)
-    			&& !(v.indexOf("晒")>=0)
-    			&& !(v.indexOf("羹")>=0)
-    			&& !(v.indexOf("_")>=0)
-       			&& !(v.indexOf("麒")>=0
-    			&& !v.equals("目薬")
-    	);
+	//日本語解析するときは名詞のみを抽出する
+    public static boolean countOut(String s){
+    	return s.indexOf("名詞") >=0;
     }
+	//日本語解析した後、フィルターをかけたい文字を記述する
+	public static boolean myFilter(String s) {
+		return !(s.indexOf(",")>=0
+				||s.indexOf("(")>=0
+				||s.indexOf(")")>=0);
+		
+	}
 }

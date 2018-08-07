@@ -18,11 +18,12 @@ import org.junit.jupiter.api.Test;
 import jyouhousyori.xml.XMLCreater;
 
 class PDFMakerTest {
+	private static final String INPUT_FILE="2018h30h_sc_am2_qs.pdf";
 
 	@Test
 	void testParsePDF() throws Exception{
-		String input_path="./pdf/input/sc/am2/2016h28a_sm_am2_qs.pdf";
-		String output_path="./pdf/output/2016h28a_sm_am2_qs.pdf.txt";
+		String input_path=String.format("./pdf/input/sc/am2/%s", INPUT_FILE);
+		String output_path=String.format("./pdf/output/%s.txt", INPUT_FILE);
 		long start = System.currentTimeMillis();
 		
 		//ì«Ç›çûÇﬁPDFÉtÉ@ÉCÉã
@@ -45,8 +46,8 @@ class PDFMakerTest {
 	
 	@Test
 	void testCreateXML() throws Exception{
-		XMLCreater.createXMLFile("work/text/result/2018h30h_sc_am2_qs.pdf.txt",
-				"./pdf/xml/2018h30h_sc_am2_qs.xml");
+		XMLCreater.createXMLFile("pdf/output/2017h29h_sc_am2_qs.pdf.txt",
+				"pdf/xml/2018h30h_sc_am2_qs.xml");
 	}
 
 }

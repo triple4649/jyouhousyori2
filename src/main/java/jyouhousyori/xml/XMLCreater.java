@@ -10,15 +10,21 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import stringutil.ReplaceUtil;
+
 
 public class XMLCreater {
 	private static final String SELECTION_REG = "^#(ア|イ|ウ|エ)";
 	private static final String QUETION_REG = "～";
 	private static final String SELECTION_TAG ="<selection option='%s'> %s </selection>";
 	private static final String QUETION_TAG ="<question num='%s'> %s ";
-	private static final String REPLACE_STR = "./jyohousyori/pdf/replace.txt";
-
+	private static final String REPLACE_STR = "./pdf/replace.txt";
+    private static final String FILE_NAME ="2017h29h_sc_am2_qs.pdf";
+	
+	
 	public static void main(String args[])throws Exception{
+		XMLCreater.createXMLFile(String.format("pdf/edit/%s.txt", FILE_NAME),
+				String.format("pdf/xml/%s.xml", FILE_NAME));
 	}
 	
 	
@@ -44,7 +50,7 @@ public class XMLCreater {
 	public static String mapStrs(String target) {
 		try {
 			return Files.lines(Paths.get(REPLACE_STR), Charset.forName("MS932"))
-					.reduce(target.replaceAll(" ", ""	),
+					.reduce(ReplaceUtil.replacewhiteSpace(target, "!", "@"),
 							(s,v)->s.replace(v.split(",")[0],v.split(",")[1]),
 			        		(s,v)->v);
 		}catch(Exception e) {

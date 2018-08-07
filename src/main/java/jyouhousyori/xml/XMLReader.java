@@ -1,7 +1,6 @@
 package jyouhousyori.xml;
 
 import java.io.File;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,8 +27,7 @@ public class XMLReader {
 					//getAllElements().eachText()は子エレメントの
 					//テキストをList<String>形式で保持しているので、reduceで
 					//文字列を連結する
-					.map(s->s.getAllElements().text()
-)
+					.map(s->s.getAllElements().text())
 					.collect(Collectors.toList());
 		}catch(Exception e){
 			e.printStackTrace();
