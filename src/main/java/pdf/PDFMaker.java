@@ -20,17 +20,18 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 public class PDFMaker {
 	public static void main(String args[])throws Exception{
-		String input_path="./pdf/input/2016h28a_sm_am2_qs.pdf";
-		String output_path="./pdf/output/2016h28a_sm_am2_qs.pdf.txt";
+		String filename ="2020r02o_pm_am2_qs.pdf";
+		String input_path="./pdf/input/pm/am2/%s";
+		String output_path="./pdf/output/pm/am2/%s.txt";
 		//読み込むPDFファイル
-		PDDocument document = PDDocument.load(new File(input_path));
+		PDDocument document = PDDocument.load(new File(String.format(input_path,filename)));
 		//PDFページを処理する
 		Stream<PDPage>stream = StreamSupport.stream(Spliterators.spliteratorUnknownSize(
 				document.getDocumentCatalog().getPages().iterator(),
 						Spliterator.ORDERED),false);
 		
 		System.out.println("start");
-		Files.write(Paths.get(output_path), 
+		Files.write(Paths.get(String.format(output_path,filename)), 
 				stream.map(s->PDFMaker.exePDFpage(s)).collect(Collectors.toList()), 
 				Charset.forName("MS932"),
 				StandardOpenOption.CREATE);

@@ -1,4 +1,6 @@
 eclipse.preferences.version=1
+encoding//src/main/java/base64/Converter.java=MS932
+encoding//src/main/java/jpn/JapaneseAnalyser.java=MS932
 encoding//src/main/java/jyouhousyori/xml/XMLCreater.java=MS932
 encoding//src/main/java/pdf/PDFMaker.java=MS932
 encoding//src/main/java/pdf/PDFtoImg.java=MS932
